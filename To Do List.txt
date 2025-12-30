@@ -1,0 +1,75 @@
+def load_tasks():
+    try:
+        with open("tasks.txt", "r") as file:
+            return file.readlines()
+    except FileNotFoundError:
+        return []
+
+def save_tasks(tasks):
+    with open("tasks.txt", "w") as file:
+        file.writelines(tasks)
+
+def add_task(task):
+    tasks = load_tasks()
+    tasks.append(task + " - Pending\n")
+    save_tasks(tasks)
+    print("Task added successfully!")
+
+def view_tasks():
+    tasks = load_tasks()
+    if not tasks:
+        print("No tasks available.")
+    else:
+        for index, task in enumerate(tasks, start=1):
+            print(f"{index}. {task.strip()}")
+
+def mark_complete(task_number):
+    tasks = load_tasks()
+    if 0 < task_number <= len(tasks):
+        tasks[task_number - 1] = tasks[task_number - 1].replace("Pending", "Completed")
+        save_tasks(tasks)
+        print("Task marked as completed!")
+    else:
+        print("Invalid task number.")
+
+def delete_task(task_number):
+    tasks = load_tasks()
+    if 0 < task_number <= len(tasks):
+        tasks.pop(task_number - 1)
+        save_tasks(tasks)
+        print("Task deleted successfully!")
+    else:
+        print("Invalid task number.")
+
+def main():
+    while True:
+        print("\n--- To-Do List Menu ---")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Completed")
+        print("4. Delete Task")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            task = input("Enter task: ")
+            add_task(task)
+        elif choice == "2":
+            view_tasks()
+        elif choice == "3":
+            view_tasks()
+            num = int(input("Enter task number: "))
+            mark_complete(num)
+        elif choice == "4":
+            view_tasks()
+            num = int(input("Enter task number: "))
+            delete_task(num)
+        elif choice == "5":
+            print("Exiting application.")
+            break
+        else:
+            print("Invalid choice!")
+
+main()
+
